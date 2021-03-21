@@ -1,0 +1,4 @@
+dn: {{openldap_server_rootdn}}
+changetype: modify
+replace: userPassword
+userPassword: {{ rootpw.stdout }}

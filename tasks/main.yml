@@ -1,0 +1,41 @@
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: openldap
+
+- name: Include OS-specific setup tasks
+  include_tasks: "setup-{{ ansible_os_family }}.yml"
+  tags: openldap
+
+- name: Hash OpenLDAP rootpw
+  command: slappasswd -h {{ openldap_server_password_hash }} -s {{ openldap_server_rootpw }}
+  register: rootpw
+  tags: openldap
+
+- name: Create OpenLDAP change root.ldif
+  template: >
+    src=change_root.j2
+    dest=/root/change_root.ldif
+    owner=root
+    group=root
+    mode=0644
+  tags: openldap
+
+- name: Change root
+  shell: "ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/change_root.ldif"
+  environment: "{{ env }}"
+  tags: openldap
+
+
+- name: Create OpenLDAP dbconf
+  template: >
+    src=change_userpasswd.j2
+    dest=/root/change_userpasswd.ldif
+    owner=root
+    group=root
+    mode=0644
+  tags: openldap
+
+- name: Change userpasswd
+  shell: "ldapmodify -H ldapi:/// -x -D {{openldap_server_rootdn}} -w admin -f /root/change_userpasswd.ldif"
+  environment: "{{ env }}"
+  tags: openldap

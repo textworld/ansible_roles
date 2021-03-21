@@ -1,0 +1,8 @@
+openldap_domain: textworld.com
+openldap_organization: textworld
+openldap_admin_password: admin
+
+openldap_server_suffix: dc=textworld,dc=com
+openldap_server_rootdn: cn=admin,dc=textworld,dc=com
+openldap_server_rootpw: 123456
+openldap_server_password_hash: "{SSHA}"
