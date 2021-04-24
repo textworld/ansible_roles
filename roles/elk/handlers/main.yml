@@ -1,0 +1,29 @@
+- name: reload zookeeper service
+  service:
+    name=zookeeper
+    state=reloaded
+
+- name: restart zookeeper
+  service:
+    name=zookeeper
+    state=restarted
+
+- name: reload kafka service
+  service:
+    name=kafka
+    state=reloaded
+
+- name: restart kafka
+  service:
+    name=kafka
+    state=restarted
+
+- name: reload elasticsearch service
+  service:
+    name=elasticsearch
+    state=reloaded
+
+- name: restart es
+  service:
+    name=elasticsearch
+    state=restarted
