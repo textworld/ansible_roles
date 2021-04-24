@@ -1,0 +1,10 @@
+---
+- name: restart redis
+  service:
+    name=redis
+    state=restarted
+
+- name: Reload service redis, in all cases
+  systemd:
+    name: redis
+    state: reloaded

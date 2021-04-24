@@ -1,0 +1,8 @@
+install_packages:
+  - vim
+  - unzip
+  - libaio1
+  - libaio-dev
+  - libnuma-dev
+  - libdata-dumper-simple-perl
+  - libncurses5

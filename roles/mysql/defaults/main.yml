@@ -1,0 +1,6 @@
+mysql_data_dir_base: /data/mysql/
+mysql_port: 3307
+mysql_install_dir: /opt/
+schema_name: zst_online_server
+user_password: zst_online_server
+mysql_root_password: QTjT5Qq8ex3B0are
