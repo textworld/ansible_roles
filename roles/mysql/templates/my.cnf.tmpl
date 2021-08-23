@@ -1,6 +1,6 @@
 [mysql]
 auto-rehash
-socket =/tmp/mysql.sock
+socket =/tmp/mysql.{{mysql_port | default(3306)}}.sock
 
 [mysqld]
 user = mysql       

@@ -1,0 +1,13 @@
+---
+
+- name: Extract kafka.tar.gz
+  unarchive:
+    src: "filebeat-{{filebeat_version}}-linux-x86_64.tar.gz"
+    dest: "{{filebeat_workdir}}"
+    list_files: yes
+    owner: "{{run_as_user}}"
+    group: "{{run_as_group}}"
+  register: archive_filebeat
+
+- set_fact: filebeat_dir="{{(filebeat_workdir', archive_filebeat.files[0]) | path_join}}" 
+
