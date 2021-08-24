@@ -1,13 +1,42 @@
 ---
 
-- name: Extract kafka.tar.gz
+- name: Extract filebeat
+  become: True
   unarchive:
     src: "filebeat-{{filebeat_version}}-linux-x86_64.tar.gz"
     dest: "{{filebeat_workdir}}"
     list_files: yes
-    owner: "{{run_as_user}}"
-    group: "{{run_as_group}}"
   register: archive_filebeat
 
-- set_fact: filebeat_dir="{{(filebeat_workdir', archive_filebeat.files[0]) | path_join}}" 
+- name: Show debug info 
+  debug: var=archive_filebeat verbosity=0
+
+- set_fact: filebeat_dir="{{(filebeat_workdir, 'filebeat-' + filebeat_version + '-linux-x86_64') | path_join}}" 
+
+
+- name: enable mysql
+  become: True
+  shell: "{{filebeat_dir}}/filebeat modules enable mysql"
+
+- name: set config
+  become: True
+  template: 
+    src: filebeat.j2
+    dest: "{{filebeat_dir}}/filebeat.yml"
+    backup: yes
+
+- name: set slowlog
+  become: True
+  template:
+    src: mysql.yml.j2
+    dest: "{{filebeat_dir}}/modules.d/mysql.yml"
+
+- name: install elasticsearch service
+  become: True
+  template:
+    src: filebeat.service.j2
+    dest: "{{systemd_dir}}/elasticsearch.service"
+  notify:
+    - reload filebeat
+    - start filebeat
 

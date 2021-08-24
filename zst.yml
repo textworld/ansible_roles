@@ -1,4 +1,4 @@
 ---
-- hosts: mysql
+- hosts: filebeat
   roles:
-    - { role: mysql }
+    - { role: filebeat }
