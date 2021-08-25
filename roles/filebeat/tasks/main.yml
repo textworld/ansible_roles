@@ -13,10 +13,19 @@
 
 - set_fact: filebeat_dir="{{(filebeat_workdir, 'filebeat-' + filebeat_version + '-linux-x86_64') | path_join}}" 
 
+- name: create data dir
+  file:
+    path: "{{filebeat_data_path}}"
+    state: directory
+
+- name: create log dir
+  file:
+    path: "{{filebeat_log_path}}"
+    state: directory
 
 - name: enable mysql
   become: True
-  shell: "{{filebeat_dir}}/filebeat modules enable mysql"
+  shell: "cd {{filebeat_dir}}&& ./filebeat  -c ./filebeat.yml modules enable mysql"
 
 - name: set config
   become: True
@@ -35,7 +44,7 @@
   become: True
   template:
     src: filebeat.service.j2
-    dest: "{{systemd_dir}}/elasticsearch.service"
+    dest: "{{systemd_dir}}/filebeat.service"
   notify:
     - reload filebeat
     - start filebeat

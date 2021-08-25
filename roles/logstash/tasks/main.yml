@@ -1,0 +1,28 @@
+---
+
+- name: create group elk
+  group:
+    name: "{{elk_group}}"
+    state: present
+
+- name: create user elk
+  user:
+    name: "{{elk_username}}"
+    group: "{{elk_group}}"
+    state: present 
+
+- name: Extract logstash
+  unarchive:
+    src: logstash-7.7.0.tar.gz
+    dest: /opt/
+    list_files: yes
+    owner: "{{elk_username}}"
+    group: "{{elk_group}}"
+  register: archive_logstash
+
+- set_fact: logstash_dir="{{('/opt', 'logstash-' + logstash_version) | path_join}}" 
+
+- name: install logstash service
+  template:
+    src: logstash.service.j2
+    dest: "{{systemd_dir}}/logstash.service"

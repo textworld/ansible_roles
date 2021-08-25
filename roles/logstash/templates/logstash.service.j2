@@ -10,5 +10,5 @@ WantedBy=multi-user.target
 [Service]
 User=vagrant
 Group=vagrant
-Environment=JAVA_HOME=/opt/jdk1.8.0_201
-ExecStart=/opt/logstash-7.7.0/bin/logstash -f /opt/logstash-7.7.0/config/mysql.conf
+#Environment=JAVA_HOME=/opt/jdk1.8.0_201
+ExecStart={{logstash_dir}}/bin/logstash -f {{logstash_dir}}/config/mysql.conf

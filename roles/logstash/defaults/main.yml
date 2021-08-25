@@ -1,0 +1,4 @@
+elk_username: elk
+elk_group: elk
+systemd_dir: /usr/lib/systemd/system
+logstash_version: 7.7.0

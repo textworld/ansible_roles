@@ -1,4 +1,4 @@
 ---
 - hosts: filebeat
   roles:
-    - { role: filebeat }
+    - { role: kafka }

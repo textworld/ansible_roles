@@ -1,0 +1,44 @@
+---
+- name: install jdk
+  apt:
+    pkg:
+    - default-jre
+    - default-jdk
+
+- name: create group elk
+  group:
+    name: "{{elk_group}}"
+    state: present
+
+- name: create user elk
+  user:
+    name: "{{elk_username}}"
+    group: "{{elk_group}}"
+    state: present 
+
+
+- name: Extract kafka.tar.gz
+  unarchive:
+    src: kafka_2.11-2.2.0.tar.gz 
+    dest: /opt/
+    list_files: yes
+    owner: "{{elk_username}}"
+    group: "{{elk_group}}"
+  register: archive_kafka
+
+- set_fact: kafka_dir="{{('/opt', archive_kafka.files[0]) | path_join}}" 
+
+- name: install kafka service
+  template:
+    src: kafka.service.j2
+    dest: "{{systemd_dir}}/kafka.service"
+
+- name: install zookeeper service
+  template:
+    src: zookeeper.service.j2
+    dest: "{{systemd_dir}}/zookeeper.service"
+  notify:
+    - reload zookeeper service
+    - reload kafka service
+    - restart zookeeper
+    - restart kafka
