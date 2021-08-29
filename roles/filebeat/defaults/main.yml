@@ -5,3 +5,5 @@ filebeat_workdir: /opt/
 systemd_dir: /usr/lib/systemd/system
 filebeat_data_path: /var/lib/filebeat
 filebeat_log_path: /var/log/filebeat
+mysql_slow_path: /var/log/mysql_slowlog/*.log
+logstash_url: localhost:5044

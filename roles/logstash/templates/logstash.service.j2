@@ -8,7 +8,7 @@ After=network.target kafka.service
 WantedBy=multi-user.target
 
 [Service]
-User=vagrant
-Group=vagrant
+User={{elk_username}}
+Group={{elk_group}}
 #Environment=JAVA_HOME=/opt/jdk1.8.0_201
 ExecStart={{logstash_dir}}/bin/logstash -f {{logstash_dir}}/config/mysql.conf

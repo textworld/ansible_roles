@@ -1,4 +1,10 @@
 ---
 - hosts: filebeat
   roles:
-    - { role: kafka }
+    - role: jdk
+    # - role: filebeat
+    #   mysql_slow_path: "/var/log/mysql_slowlog2/*.log"
+    
+    # - role: logstash
+    #   kafka_server: 127.0.0.1:9092
+    #   slow_log_topic: mysql_slow_log

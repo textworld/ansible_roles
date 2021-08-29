@@ -1,0 +1,13 @@
+---
+- name: create jdk 
+  ansible.builtin.file:
+    path: /opt/jdk8
+    state: directory
+    mode: '0755'
+    
+- name: Extract jdk
+  unarchive:
+    src: jdk-8u144-linux-x64.tar.gz
+    dest: /opt/jdk8
+    list_files: yes
+    extra_opts: [--strip-components=1]

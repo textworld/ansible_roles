@@ -1,0 +1,6 @@
+--- 
+- name: git checkout code
+  ansible.builtin.git:
+    repo: git@github.com:mylogin/hello.git
+    dest: /home/mylogin/hello
+

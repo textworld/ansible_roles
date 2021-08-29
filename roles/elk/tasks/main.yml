@@ -16,6 +16,11 @@
     group: "{{elk_group}}"
     state: present 
 
+- name: create kafka dir
+  file:
+    path: /opt/kafka
+    state: directory 
+
 - name: Extract kafka.tar.gz
   unarchive:
     src: kafka_2.11-2.2.0.tar.gz 
@@ -23,6 +28,7 @@
     list_files: yes
     owner: "{{elk_username}}"
     group: "{{elk_group}}"
+    
   register: archive_kafka
 
 - set_fact: kafka_dir="{{('/opt', archive_kafka.files[0]) | path_join}}" 

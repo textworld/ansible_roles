@@ -46,6 +46,6 @@
     src: filebeat.service.j2
     dest: "{{systemd_dir}}/filebeat.service"
   notify:
-    - reload filebeat
-    - start filebeat
+    - systemd reload
+    - restart filebeat
 

@@ -1,9 +1,9 @@
 ---
-- name: install jdk
-  apt:
-    pkg:
-    - default-jre
-    - default-jdk
+# - name: install jdk
+#   apt:
+#     pkg:
+#     - default-jre
+#     - default-jdk
 
 - name: create group elk
   group:
@@ -16,17 +16,21 @@
     group: "{{elk_group}}"
     state: present 
 
+- name: create kafka dir
+  file:
+    path: /opt/kafka
+    state: directory 
 
 - name: Extract kafka.tar.gz
   unarchive:
     src: kafka_2.11-2.2.0.tar.gz 
-    dest: /opt/
+    dest: /opt/kafka
     list_files: yes
     owner: "{{elk_username}}"
     group: "{{elk_group}}"
+    extra_opts: [--strip-components=2]
   register: archive_kafka
 
-- set_fact: kafka_dir="{{('/opt', archive_kafka.files[0]) | path_join}}" 
 
 - name: install kafka service
   template:
@@ -37,8 +41,18 @@
   template:
     src: zookeeper.service.j2
     dest: "{{systemd_dir}}/zookeeper.service"
-  notify:
-    - reload zookeeper service
-    - reload kafka service
-    - restart zookeeper
-    - restart kafka
+
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: restart zookeeper
+  service:
+    name=zookeeper
+    state=restarted
+
+- name: restart kafka
+  service:
+    name=kafka
+    state=restarted

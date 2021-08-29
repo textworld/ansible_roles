@@ -14,4 +14,4 @@
 
     # Set custom paths for the log files. If left empty,
     # Filebeat will choose the paths depending on your OS.
-    var.paths: ['/var/log/mysql_slowlog/*.log']
+    var.paths: ['{{mysql_slow_path}}']

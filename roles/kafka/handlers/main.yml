@@ -1,17 +1,11 @@
-- name: reload zookeeper service
-  service:
-    name=zookeeper
-    state=reloaded
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
 
 - name: restart zookeeper
   service:
     name=zookeeper
     state=restarted
-
-- name: reload kafka service
-  service:
-    name=kafka
-    state=reloaded
 
 - name: restart kafka
   service:

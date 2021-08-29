@@ -26,3 +26,18 @@
   template:
     src: logstash.service.j2
     dest: "{{systemd_dir}}/logstash.service"
+
+- name: copy config file
+  template:
+    src: mysql_slow.conf
+    dest: "{{logstash_dir}}/config/mysql.conf"
+
+- name: systemd reload
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: restart logstash
+  service:
+    state: restarted
+    name: logstash
+  

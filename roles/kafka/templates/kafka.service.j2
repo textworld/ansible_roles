@@ -9,6 +9,7 @@ Type=simple
 User={{elk_username}}
 Group={{elk_group}}
 Environment=KAFKA_HEAP_OPTS="-Xmx256M -Xms256M"
+Environment=JAVA_HOME="/opt/jdk8"
 ExecStart={{kafka_dir}}/bin/kafka-server-start.sh {{kafka_dir}}/config/server.properties
 ExecStop={{kafka_dir}}/bin/bin/kafka-server-stop.sh
 
