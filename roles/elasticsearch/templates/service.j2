@@ -1,0 +1,54 @@
+
+[Unit]
+Description=Elasticsearch
+Documentation=https://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+RuntimeDirectory=elasticsearch
+PrivateTmp=true
+Environment=ES_HOME={{es_dir}}
+Environment=ES_PATH_CONF={{es_dir}}/config
+Environment=PID_DIR={{es_dir}}/var
+Environment=ES_SD_NOTIFY=true
+EnvironmentFile=-/etc/default/elasticsearch
+
+WorkingDirectory={{es_dir}}
+
+User={{elk_username}}
+Group={{elk_group}}
+
+ExecStart={{es_dir}}/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet
+
+# StandardOutput is configured to redirect to journalctl since
+# some error messages may be logged in standard output before
+# elasticsearch logging system is initialized. Elasticsearch
+# stores its logs in /var/log/elasticsearch and does not use
+# journalctl by default. If you also want to enable journalctl
+# logging, you can simply remove the "quiet" option from ExecStart.
+StandardOutput=journal
+
+StandardError=inherit
+
+LimitNOFILE=65535
+LimitNPROC=4096
+
+# Specifies the maximum size of virtual memory
+LimitAS=infinity
+
+# Specifies the maximum file size
+LimitFSIZE=infinity
+
+# Disable timeout logic and wait until process is stopped
+TimeoutStopSec=0
+
+KillSignal=SIGTERM
+KillMode=process
+SendSIGKILL=no
+SuccessExitStatus=143
+TimeoutStartSec=75
+
+[Install]
+WantedBy=multi-user.target

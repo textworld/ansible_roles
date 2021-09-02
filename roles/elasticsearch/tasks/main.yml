@@ -1,0 +1,45 @@
+---
+
+- name: create group elk
+  group:
+    name: "{{elk_group}}"
+    state: present
+
+- name: create user elk
+  user:
+    name: "{{elk_username}}"
+    group: "{{elk_group}}"
+    state: present 
+
+- name: Extract Elasticsearch
+  unarchive:
+    src: elasticsearch-7.6.1-linux-x86_64.tar.gz
+    dest: /opt/
+    list_files: yes
+  register: archive_es
+
+- set_fact: es_dir="{{('/opt/', archive_es.files[0]) | path_join}}"
+
+- name: Extract certs
+  unarchive:
+    src: certs.tar.gz
+    dest: "{{es_dir}}/config/"
+
+- name: copy pack core
+  file:
+    src: x-pack-core-7.12.0.jar
+    dest: "{{es_dir}}/modules/x-pack-core/"
+
+- name: change es dir's owner to elk
+  file:
+    path: "{{es_dir}}"
+    owner: elk
+    group: elk
+    recurse: yes
+  tags: es
+
+
+- name: install elasticsearch service
+  template:
+    src: elasticsearch.service.j2
+    dest: "{{systemd_dir}}/elasticsearch.service"
