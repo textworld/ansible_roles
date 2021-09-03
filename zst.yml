@@ -1,17 +1,17 @@
 ---
 - hosts: filebeat
   roles:
-    - role: jdk
+    # - role: jdk
 
     - role: elasticsearch
 
-    - role: kafka
+    # - role: kafka
 
-    - role: ldap
+    # - role: ldap
 
-    - role: filebeat
-      mysql_slow_path: "/var/log/mysql_slowlog2/*.log"
+    # - role: filebeat
+    #   mysql_slow_path: "/var/log/mysql_slowlog2/*.log"
     
-    - role: logstash
-      kafka_server: 127.0.0.1:9092
-      slow_log_topic: mysql_slow_log
+    # - role: logstash
+    #   kafka_server: 127.0.0.1:9092
+    #   slow_log_topic: mysql_slow_log

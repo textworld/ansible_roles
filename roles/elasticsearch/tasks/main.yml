@@ -13,12 +13,12 @@
 
 - name: Extract Elasticsearch
   unarchive:
-    src: elasticsearch-7.6.1-linux-x86_64.tar.gz
+    src: elasticsearch-7.12.0-linux-x86_64.tar.gz
     dest: /opt/
     list_files: yes
   register: archive_es
 
-- set_fact: es_dir="{{('/opt/', archive_es.files[0]) | path_join}}"
+- set_fact: es_dir="{{('/opt/', archive_es.files[0]) | path_join | dirname}}"
 
 - name: Extract certs
   unarchive:
@@ -26,9 +26,38 @@
     dest: "{{es_dir}}/config/"
 
 - name: copy pack core
-  file:
+  copy:
     src: x-pack-core-7.12.0.jar
     dest: "{{es_dir}}/modules/x-pack-core/"
+
+- name: "env file"
+  template:
+    src: elasticsearch.env.j2
+    dest: "{{es_dir}}/config/elasticsearch.env"
+
+- name: "config file"
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{es_dir}}/config/elasticsearch.yml"
+
+- name: "create var"
+  file:
+    path: "{{es_dir}}/var"
+    state: directory
+
+- name: "copy systemd"
+  unarchive:
+    src: systemd.tar.gz
+    dest: "{{es_dir}}/modules"
+
+- name: "change dist type"
+  shell: "sed -i \"s/ES_DISTRIBUTION_TYPE=tar/ES_DISTRIBUTION_TYPE=rpm/\" {{es_dir}}/bin/elasticsearch-env"
+
+- name: create key store
+  shell: "{{es_dir}}/bin/elasticsearch-keystore create"
+
+- name: set default password
+  shell: "echo 'password' | {{es_dir}}/bin/elasticsearch-keystore add -x 'bootstrap.password'"
 
 - name: change es dir's owner to elk
   file:
@@ -39,7 +68,12 @@
   tags: es
 
 
+
 - name: install elasticsearch service
   template:
     src: elasticsearch.service.j2
     dest: "{{systemd_dir}}/elasticsearch.service"
+
+- name: systemd reload
+  ansible.builtin.systemd:
+    daemon_reload: yes
