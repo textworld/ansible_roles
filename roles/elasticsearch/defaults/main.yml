@@ -1,3 +1,4 @@
 elk_username: elk
 elk_group: elk
 systemd_dir: /usr/lib/systemd/system
+super_user_password: password

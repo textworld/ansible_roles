@@ -1,9 +1,4 @@
 ---
-# - name: install jdk
-#   apt:
-#     pkg:
-#     - default-jre
-#     - default-jdk
 
 - name: create group elk
   group:
@@ -32,6 +27,11 @@
   register: archive_kafka
 
 
+- name: set kafka server config
+  template:
+    src: server.properties.j2
+    dest: /opt/kafka/config/server.properties
+      
 - name: install kafka service
   template:
     src: kafka.service.j2

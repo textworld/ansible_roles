@@ -1,3 +1,0 @@
-elk_username: elk
-elk_group: elk
-systemd_dir: /etc/systemd/system

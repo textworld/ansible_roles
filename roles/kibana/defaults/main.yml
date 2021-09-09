@@ -1,0 +1,11 @@
+es_host: http://localhost:9200
+es_user: elastic
+es_password: password
+server_host: 0.0.0.0
+server_port: 5601
+
+run_as_user: elk
+run_as_group: elk
+jdk_home: /opt/jdk8
+
+systemd_dir: /usr/lib/systemd/system

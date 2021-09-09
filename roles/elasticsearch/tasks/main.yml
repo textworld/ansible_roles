@@ -57,7 +57,7 @@
   shell: "{{es_dir}}/bin/elasticsearch-keystore create"
 
 - name: set default password
-  shell: "echo 'password' | {{es_dir}}/bin/elasticsearch-keystore add -x 'bootstrap.password'"
+  shell: "echo '{{super_user_password}}' | {{es_dir}}/bin/elasticsearch-keystore add -x 'bootstrap.password'"
 
 - name: change es dir's owner to elk
   file:
@@ -77,3 +77,10 @@
 - name: systemd reload
   ansible.builtin.systemd:
     daemon_reload: yes
+
+
+- name: start elasticsearch
+  service:
+    state: restarted
+    name: elasticsearch
+  

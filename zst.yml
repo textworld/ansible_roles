@@ -3,9 +3,11 @@
   roles:
     # - role: jdk
 
-    - role: elasticsearch
+    # - role: elasticsearch
+    #   super_user_password: password
 
-    # - role: kafka
+    #- role: kafka
+    - role: kibana
 
     # - role: ldap
 
@@ -15,3 +17,5 @@
     # - role: logstash
     #   kafka_server: 127.0.0.1:9092
     #   slow_log_topic: mysql_slow_log
+    #   es_user: elastic
+    #   es_password: password

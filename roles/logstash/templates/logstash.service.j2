@@ -10,5 +10,5 @@ WantedBy=multi-user.target
 [Service]
 User={{elk_username}}
 Group={{elk_group}}
-#Environment=JAVA_HOME=/opt/jdk1.8.0_201
+Environment=JAVA_HOME=/opt/jdk8
 ExecStart={{logstash_dir}}/bin/logstash -f {{logstash_dir}}/config/mysql.conf
